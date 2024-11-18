@@ -5,10 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Image to Arduino Code Converter</title>
     <style>
-        canvas {
-            border: 1px solid black;
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f0f0f5;
+            color: #333;
+        }
+        h1 {
+            text-align: center;
+        }
+        input[type="file"] {
             display: block;
-            margin: 20px 0;
+            margin: 20px auto;
+            padding: 10px;
+            border: 2px solid #666;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #fff;
+        }
+        canvas {
+            display: block;
+            margin: 20px auto;
+            border: 2px solid #444;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        pre {
+            background-color: #e8e8e8;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            overflow: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            max-width: 100%;
         }
     </style>
 </head>
