@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Новогодний сайт с анимированными падающими снежинками</title>
+    <title>Image to Arduino Code Converter with Falling Snowflakes</title>
     <style>
         /* Основной стиль страницы */
         body {
             margin: 0;
             padding: 0;
-            background: linear-gradient(to bottom, #1e3c72, #2a5298); /* Фон зимнего неба */
+            background: linear-gradient(to bottom, #1e3c72, #2a5298);
             color: #ffffff;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             overflow: hidden;
@@ -22,6 +22,51 @@
             margin-top: 20px;
             color: #ffe066;
             text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Контейнер приложения */
+        .container {
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* Входной элемент */
+        input[type="file"] {
+            display: block;
+            margin: 20px auto;
+            padding: 10px;
+            border: 2px solid #0066cc;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #e0f7fa;
+            transition: background-color 0.3s;
+        }
+
+        input[type="file"]:hover {
+            background-color: #b2ebf2;
+        }
+
+        /* Холст */
+        canvas {
+            display: block;
+            margin: 20px auto;
+            border: 2px solid #444;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Вывод кода */
+        pre {
+            background-color: #f0f4f8;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            overflow: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            max-width: 90%;
+            margin: 20px auto;
+            max-height: 300px;
+            color: #333;
         }
 
         /* Снежинка */
@@ -58,9 +103,61 @@
     </style>
 </head>
 <body>
-    <h1>С Новым Годом!</h1>
+    <h1>С Новым Годом и Конвертер Изображений!</h1>
+    <div class="container">
+        <input type="file" id="imageInput" accept="image/*">
+        <canvas id="canvas"></canvas>
+        <pre id="arduinoCode">Здесь появится сгенерированный код для Arduino...</pre>
+    </div>
 
     <script>
+        // Элементы HTML
+        const imageInput = document.getElementById('imageInput');
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const arduinoCode = document.getElementById('arduinoCode');
+
+        // Обработчик загрузки изображения
+        imageInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        canvas.width = img.width;
+                        canvas.height = img.height;
+                        ctx.drawImage(img, 0, 0);
+                        generateArduinoCode();
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Функция генерации кода для Arduino
+        function generateArduinoCode() {
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const data = imageData.data;
+            let code = 'const uint8_t imageData[] = {\n';
+
+            for (let i = 0; i < data.length; i += 4) {
+                const r = data[i];
+                const g = data[i + 1];
+                const b = data[i + 2];
+                const grayscale = Math.round((r + g + b) / 3);
+                code += `0x${grayscale.toString(16).padStart(2, '0')}, `;
+
+                if ((i / 4 + 1) % canvas.width === 0) {
+                    code += '\n';
+                }
+            }
+
+            code += '};';
+            arduinoCode.textContent = code;
+        }
+
         // Функция для создания снежинки
         function createSnowflake() {
             const snowflake = document.createElement('img');
@@ -68,9 +165,9 @@
             snowflake.classList.add('snowflake');
 
             // Установка случайных свойств для снежинки
-            snowflake.style.left = Math.random() * 100 + 'vw'; // Случайное горизонтальное положение
-            snowflake.style.width = Math.random() * 20 + 10 + 'px'; // Размер снежинки от 10 до 30 пикселей
-            snowflake.style.animationDuration = Math.random() * 5 + 3 + 's'; // Продолжительность анимации от 3 до 8 секунд
+            snowflake.style.left = Math.random() * 100 + 'vw';
+            snowflake.style.width = Math.random() * 20 + 10 + 'px';
+            snowflake.style.animationDuration = Math.random() * 5 + 3 + 's';
 
             // Добавление снежинки на страницу
             document.body.appendChild(snowflake);
@@ -78,10 +175,10 @@
             // Удаление снежинки после завершения анимации
             setTimeout(() => {
                 snowflake.remove();
-            }, (Math.random() * 5 + 3) * 1000); // Удаление через время, соответствующее продолжительности анимации
+            }, (Math.random() * 5 + 3) * 1000);
         }
 
-        // Генерация снежинок каждую 200 мс
+        // Генерация снежинок каждые 200 мс
         setInterval(createSnowflake, 200);
     </script>
 </body>
