@@ -3,15 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image to Arduino Code Converter with Snow Animation</title>
+    <title>Image to Arduino Code Converter</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 40px;
             background-color: #f8f9fa;
             color: #333;
-            overflow: hidden; /* Скрывает полосы прокрутки */
-            position: relative;
         }
         h1 {
             text-align: center;
@@ -21,8 +19,6 @@
             max-width: 800px;
             margin: 0 auto;
             text-align: center;
-            z-index: 1;
-            position: relative;
         }
         input[type="file"] {
             display: block;
@@ -71,35 +67,11 @@
             max-width: 100%;
             max-height: 400px;
         }
-        .snowflake {
-            position: fixed;
-            top: -50px;
-            z-index: 0;
-            user-select: none;
-            pointer-events: none;
-            animation: fall linear infinite, spin linear infinite;
-        }
-        @keyframes fall {
-            0% {
-                transform: translateY(0) rotate(0deg);
-            }
-            100% {
-                transform: translateY(100vh) rotate(360deg);
-            }
-        }
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-            100% {
-                transform: rotate(360deg);
-            }
-        }
     </style>
 </head>
 <body>
-    <h1>Image to Arduino Code Converter with Snow Animation</h1>
     <div class="container">
+        <h1>Image to Arduino Code Converter</h1>
         <input type="file" id="imageInput" accept="image/*">
         <canvas id="canvas"></canvas>
         <div class="controls">
@@ -184,25 +156,6 @@
 
         grayscaleButton.addEventListener('click', applyGrayscale);
         invertButton.addEventListener('click', invertColors);
-
-        // Функция для создания снежинки
-        function createSnowflake() {
-            const snowflake = document.createElement('div');
-            snowflake.classList.add('snowflake');
-            snowflake.textContent = '❄️'; // Можно заменить на символ или изображение снежинки
-            snowflake.style.left = Math.random() * 100 + 'vw';
-            snowflake.style.fontSize = Math.random() * 20 + 10 + 'px';
-            snowflake.style.animationDuration = Math.random() * 5 + 3 + 's';
-
-            document.body.appendChild(snowflake);
-
-            setTimeout(() => {
-                snowflake.remove();
-            }, (Math.random() * 5 + 3) * 1000);
-        }
-
-        // Генерация снежинок каждую секунду
-        setInterval(createSnowflake, 300);
     </script>
 </body>
 </html>
