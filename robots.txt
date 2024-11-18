@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://tytik49.github.io/image-to-arduino-converter/sitemap.xml
